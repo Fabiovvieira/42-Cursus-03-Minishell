@@ -6,56 +6,37 @@
 /*   By: kfaustin <kfaustin@student.42porto.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 14:14:58 by kfaustin          #+#    #+#             */
-/*   Updated: 2023/04/21 14:29:41 by kfaustin         ###   ########.fr       */
+/*   Updated: 2023/05/20 21:12:55 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "minishell.h"
+# include "./minishell.h"
 
 # define GREAT 1
 # define GREATGREAT 2
 # define LESS 3
 # define LESSLESS 4
-# define DQUOTE 5
-# define SQUOTE 6
 # define WSPACE " \t\r\n\v"
-# define METACH "|&;()<>"
+# define METACH "|<>"
+# define UNSUPMETACH "&;()*{}\\"
 
+void	init_argv(t_msh *data);
+t_scom	*ft_lstlastsCom(t_scom *lst);
+t_scom	*ft_lstnewsCom(void);
+void	ft_lstadd_backsCom(t_scom **lst, t_scom *new);
 
-//Command table is an array of struct SimpleCommands(sCom)  -  Simple Commands as said by GNU manual:
-//A simple command is the kind of command encountered most often. It’s just a sequence of words separated by blanks,
-// terminated by one of the shell’s control operators (see Definitions). The first word generally specifies a command to be executed,
-// with the rest of the words being that command’s arguments.
+int		redirout(t_msh	*data, char **str);
+int		redirin(t_msh	*data, char **str);
+int		get_token_pipe(t_msh	*data, char **str);
+void	get_token_word(t_msh	*data, char **str);
+int		ft_parse(char	*input, t_msh	*data);
+void	free_lst(t_list *lst);
+void	free_lstsCom(t_msh *lst);
+int check_node_empty(t_scom *lst);
+int check_nbr_pipes(t_scom *lst);
 
-//echo  > kelvin  > kelvin > kelvin > kelvin > kelvin > kelvin > kelvin > kelvin kelvin fabio valli vieira > fabio > test
-//echo  > kelvin  kelvin fabio valli vieira > fabio > test
-typedef struct s_sCom {
-    int     id;
-    t_list  **lstOfWords;
-    char    **argList;
-    int     numOfArg;
-    t_list  **lstOfRedirIn;
-    t_list  **lstOfRedirOut;
-} t_sCom;
-
-typedef struct s_redir {
-    int     type;
-    char    *filename;
-} t_redir;
-
-typedef struct s_word {
-    char *word;
-} t_word;
-
-typedef struct s_tokens
-{
-	char	*cmd;
-	char	*flag;
-	char	*complement;
-	char	**tokens;
-}		t_tokens;
 
 #endif
